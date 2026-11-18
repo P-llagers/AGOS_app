@@ -2,7 +2,8 @@ import 'package:agos_app/app.dart';
 import 'package:agos_app/data/gateway_client.dart';
 import 'package:agos_app/data/local_store.dart';
 import 'package:agos_app/features/monitor/monitor_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:agos_app/splash_screen.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sembast/sembast_memory.dart';
 
@@ -72,5 +73,29 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('shows the splash screen branding and gradient', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: SplashScreen()));
+
+    expect(find.text('LOGO'), findsOneWidget);
+    expect(find.text('AGOS'), findsOneWidget);
+    expect(find.text('RESCUE MONITOR'), findsOneWidget);
+
+    final container = tester.widget<Container>(
+      find.descendant(
+        of: find.byType(SplashScreen),
+        matching: find.byType(Container).first,
+      ),
+    );
+    final decoration = container.decoration! as BoxDecoration;
+    final gradient = decoration.gradient! as LinearGradient;
+    expect(
+      gradient.colors,
+      const [
+        Color(0xFF235C96),
+        Color(0xFF071523),
+      ],
+    );
   });
 }

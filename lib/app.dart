@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'features/monitor/monitor_controller.dart';
 import 'features/monitor/monitor_screen.dart';

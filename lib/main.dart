@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'app.dart';
 import 'data/gateway_client.dart';
 import 'data/local_store.dart';
 import 'features/monitor/monitor_controller.dart';
+import 'splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,17 +22,30 @@ class _BootstrapState extends State<_Bootstrap> {
   late Future<MonitorController> _startup = _initialize();
 
   Future<MonitorController> _initialize() async {
-    final store = await LocalStore.open();
-    final controller = MonitorController(
-      client: HttpGatewayClient(),
-      store: store,
-    );
+    final stopwatch = Stopwatch()..start();
+    MonitorController? controller;
+
     try {
+      final store = await LocalStore.open();
+      controller = MonitorController(
+        client: HttpGatewayClient(),
+        store: store,
+      );
       await controller.initialize();
+      await _waitForMinimumSplash(stopwatch);
       return controller;
     } catch (_) {
-      controller.dispose();
+      controller?.dispose();
+      await _waitForMinimumSplash(stopwatch);
       rethrow;
+    }
+  }
+
+  Future<void> _waitForMinimumSplash(Stopwatch stopwatch) async {
+    final elapsed = stopwatch.elapsed;
+    const minimum = Duration(seconds: 1);
+    if (elapsed < minimum) {
+      await Future<void>.delayed(minimum - elapsed);
     }
   }
 
@@ -43,11 +57,11 @@ class _BootstrapState extends State<_Bootstrap> {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32),
-              child: snapshot.hasError
-                  ? Column(
+          body: snapshot.hasError
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(Icons.storage_outlined, size: 48),
@@ -63,10 +77,10 @@ class _BootstrapState extends State<_Bootstrap> {
                           child: const Text('Try again'),
                         ),
                       ],
-                    )
-                  : const CircularProgressIndicator(),
-            ),
-          ),
+                    ),
+                  ),
+                )
+              : const SplashScreen(),
         ),
       );
     },

@@ -16,6 +16,7 @@ dependencies:
   sembast: ^3.10.1
   sembast_web: ^2.4.7
 
+  material_ui: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
