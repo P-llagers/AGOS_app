@@ -182,6 +182,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final controller = widget.controller;
     final (statusColor, statusText) = _statusSummary(controller);
     final hasTopBanner =
@@ -226,25 +227,23 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> {
               _MapControlButton(
                 tooltip: 'Zoom in',
                 onPressed: () => _mapController.zoomBy(0.8),
-                child: const Icon(Icons.add, color: agosTextPrimary, size: 22),
+                child: Icon(Icons.add, color: palette.textPrimary, size: 22),
               ),
               const SizedBox(height: 8),
               _MapControlButton(
                 tooltip: 'Zoom out',
                 onPressed: () => _mapController.zoomBy(-0.8),
-                child: const Icon(
-                  Icons.remove,
-                  color: agosTextPrimary,
-                  size: 22,
-                ),
+                child: Icon(Icons.remove, color: palette.textPrimary, size: 22),
               ),
               const SizedBox(height: 8),
               _MapControlButton(
                 tooltip: 'Recenter on Cebu',
                 onPressed: _mapController.recenter,
-                child: const _CompassStarIcon(
+                child: _CompassStarIcon(
                   size: 20,
-                  color: Color(0xFF6DA6D9),
+                  color: palette.isDark
+                      ? const Color(0xFF6DA6D9)
+                      : palette.accent,
                 ),
               ),
             ],
@@ -259,12 +258,12 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> {
           child: Container(
             padding: const EdgeInsets.fromLTRB(18, 14, 18, 13),
             decoration: BoxDecoration(
-              color: agosSurfaceTranslucent,
+              color: palette.surfaceTranslucent,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: agosBorderBright, width: 1),
+              border: Border.all(color: palette.borderBright, width: 1),
               boxShadow: const [
                 BoxShadow(
-                  color: Color(0x66000000),
+                  color: Color(0x44000000),
                   blurRadius: 16,
                   offset: Offset(0, 6),
                 ),
@@ -280,7 +279,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> {
                       child: _HudStat(
                         label: 'NODES',
                         value: '${controller.nodes.length}',
-                        valueColor: agosTextPrimary,
+                        valueColor: palette.textPrimary,
                       ),
                     ),
                     Expanded(
@@ -288,15 +287,15 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> {
                         label: 'SOS ACTIVE',
                         value: controller.nodes.isEmpty ? '0' : '—',
                         valueColor: controller.nodes.isEmpty
-                            ? agosAlertRed
-                            : agosMutedText,
+                            ? palette.danger
+                            : palette.textMuted,
                       ),
                     ),
                     Expanded(
                       child: _HudStat(
                         label: 'LAST UP-LINK',
                         value: _formatUplinkTime(controller.lastSync),
-                        valueColor: agosTextPrimary,
+                        valueColor: palette.textPrimary,
                       ),
                     ),
                   ],
@@ -318,11 +317,11 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> {
                         statusText,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Barlow',
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: agosMutedText,
+                          color: palette.textMuted,
                           letterSpacing: 0.2,
                         ),
                       ),
@@ -524,13 +523,14 @@ class _MapControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     return Tooltip(
       message: tooltip,
       child: Material(
-        color: agosButtonGlass,
+        color: palette.buttonGlass,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(11),
-          side: const BorderSide(color: agosBorderBright, width: 1),
+          side: BorderSide(color: palette.borderBright, width: 1),
         ),
         child: InkWell(
           onTap: onPressed,

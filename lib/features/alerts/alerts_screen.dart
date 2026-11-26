@@ -132,6 +132,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final controller = widget.controller;
     final allAlerts = _buildAlerts(controller);
     final attentionCount = allAlerts
@@ -167,9 +168,9 @@ class _AlertsScreenState extends State<AlertsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  const Flexible(
+                  Flexible(
                     child: Padding(
-                      padding: EdgeInsets.only(right: 12),
+                      padding: const EdgeInsets.only(right: 12),
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.centerLeft,
@@ -180,7 +181,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                             fontWeight: FontWeight.w700,
                             fontSize: titleFontSize,
                             letterSpacing: titleFontSize * 0.02, // 2% tracking
-                            color: Colors.white,
+                            color: palette.headerTitle,
                           ),
                         ),
                       ),
@@ -192,13 +193,15 @@ class _AlertsScreenState extends State<AlertsScreen> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         '$attentionCount need attention',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Barlow Semi Condensed',
                           fontWeight: FontWeight.w500,
                           fontSize: attentionFontSize,
                           letterSpacing:
                               attentionFontSize * 0.01, // 1% tracking
-                          color: Color(0xFF8BB8DC),
+                          color: palette.isDark
+                              ? const Color(0xFF8BB8DC)
+                              : palette.textMuted,
                         ),
                       ),
                     ),
@@ -267,14 +270,15 @@ class _AlertFilterPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     const buttonFontSize = 14.5;
 
     return Material(
-      color: selected ? const Color(0xFF1A344D) : const Color(0xFF102235),
+      color: selected ? palette.pillSelectedBg : palette.pillBg,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
         side: BorderSide(
-          color: selected ? agosAccentOrange : agosBorderBright,
+          color: selected ? palette.accent : palette.borderBright,
           width: selected ? 2 : 1,
         ),
       ),
@@ -285,12 +289,12 @@ class _AlertFilterPill extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow Semi Condensed',
               fontWeight: FontWeight.w500,
               fontSize: buttonFontSize,
               letterSpacing: buttonFontSize * -0.01, // -1% tracking
-              color: agosTextPrimary,
+              color: palette.textPrimary,
             ),
           ),
         ),
@@ -306,6 +310,7 @@ class _TacticalAlertCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final (
       bgColor,
       borderColor,
@@ -314,27 +319,28 @@ class _TacticalAlertCard extends StatelessWidget {
       icon,
     ) = switch (entry.severity) {
       _AlertSeverity.critical => (
-        const Color(0xFF34131B),
-        const Color(0xFFE04850),
-        const Color(0xFFF0626A),
-        const Color(0xFFE0C8CC),
+        palette.isDark ? const Color(0xFF34131B) : const Color(0xFFFFF0F2),
+        palette.isDark ? const Color(0xFFE04850) : const Color(0xFFD9434E),
+        palette.isDark ? const Color(0xFFF0626A) : const Color(0xFFC22734),
+        palette.isDark ? const Color(0xFFE0C8CC) : const Color(0xFF5A2A30),
         Icons.warning_amber_rounded,
       ),
       _AlertSeverity.warning => (
-        const Color(0xFF28200D),
-        const Color(0xFFC99626),
-        const Color(0xFFF4B63B),
-        const Color(0xFFDDD3BD),
+        palette.isDark ? const Color(0xFF28200D) : const Color(0xFFFFF8E8),
+        palette.isDark ? const Color(0xFFC99626) : const Color(0xFFD19622),
+        palette.isDark ? const Color(0xFFF4B63B) : const Color(0xFF9F6700),
+        palette.isDark ? const Color(0xFFDDD3BD) : const Color(0xFF5B4A23),
         Icons.warning_amber_rounded,
       ),
       _AlertSeverity.info => (
-        const Color(0xFF0F2337),
-        const Color(0xFF3E7EB0),
-        const Color(0xFF69B3EA),
-        const Color(0xFFC4D7E8),
+        palette.isDark ? const Color(0xFF0F2337) : const Color(0xFFEEF6FD),
+        palette.isDark ? const Color(0xFF3E7EB0) : const Color(0xFF4F8EC0),
+        palette.isDark ? const Color(0xFF69B3EA) : const Color(0xFF1D6296),
+        palette.isDark ? const Color(0xFFC4D7E8) : const Color(0xFF2B4C66),
         Icons.info_outline_rounded,
       ),
     };
+    final linkColor = palette.isDark ? Colors.white : palette.textPrimary;
 
     return Container(
       width: double.infinity,
@@ -381,11 +387,11 @@ class _TacticalAlertCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             entry.headline,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow',
               fontWeight: FontWeight.w700,
               fontSize: 15.5,
-              color: Colors.white,
+              color: palette.headerTitle,
             ),
           ),
           const SizedBox(height: 6),
@@ -408,13 +414,13 @@ class _TacticalAlertCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Text(
                   entry.actionLabel!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Barlow Semi Condensed',
                     fontWeight: FontWeight.w600,
                     fontSize: 14.5,
-                    color: Colors.white,
+                    color: linkColor,
                     decoration: TextDecoration.underline,
-                    decorationColor: Colors.white,
+                    decorationColor: linkColor,
                   ),
                 ),
               ),
@@ -439,6 +445,7 @@ class _AlertsEmptyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final (title, body, showSettingsLink) = switch (filter) {
       _AlertsFilter.all => (
         'No active alerts',
@@ -468,31 +475,31 @@ class _AlertsEmptyCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
       decoration: BoxDecoration(
-        color: agosSurface,
+        color: palette.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: agosBorderBright, width: 1.1),
+        border: Border.all(color: palette.borderBright, width: 1.1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow Condensed',
               fontWeight: FontWeight.w700,
               fontSize: 21,
               letterSpacing: 0.4,
-              color: agosTextPrimary,
+              color: palette.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             body,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow',
               fontSize: 13.5,
               height: 1.45,
-              color: agosMutedText,
+              color: palette.textMuted,
             ),
           ),
           if (showSettingsLink) ...[
@@ -500,17 +507,17 @@ class _AlertsEmptyCard extends StatelessWidget {
             InkWell(
               onTap: onOpenSettings,
               borderRadius: BorderRadius.circular(4),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 2),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Text(
                   'Open connection settings',
                   style: TextStyle(
                     fontFamily: 'Barlow Semi Condensed',
                     fontWeight: FontWeight.w600,
                     fontSize: 14.5,
-                    color: Colors.white,
+                    color: palette.headerTitle,
                     decoration: TextDecoration.underline,
-                    decorationColor: Colors.white,
+                    decorationColor: palette.headerTitle,
                   ),
                 ),
               ),

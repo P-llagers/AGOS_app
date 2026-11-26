@@ -198,10 +198,53 @@ void main() {
         closeTo((criticalPill.style?.fontSize ?? 14.5) * -0.01, 0.001),
       );
 
-      // Switch to SETTINGS tab
+      // Switch to SETTINGS tab and verify existing content + new bottom sections & Light mode accent shift
       await tester.tap(find.text('SETTINGS').last);
       await tester.pumpAndSettle();
       expect(find.text('Gateway address'), findsOneWidget);
+      expect(find.text('CONNECTION'), findsOneWidget);
+      expect(find.text('DISPLAY'), findsOneWidget);
+      expect(find.text('SOS sound and vibration'), findsOneWidget);
+
+      final connectionHeading = tester.widget<Text>(find.text('CONNECTION'));
+      expect(connectionHeading.style?.fontFamily, 'Barlow');
+      expect(connectionHeading.style?.fontWeight, FontWeight.w600);
+      expect(
+        connectionHeading.style?.letterSpacing,
+        closeTo((connectionHeading.style?.fontSize ?? 12.5) * 0.05, 0.001),
+      );
+      expect(connectionHeading.style?.color, agosSectionTitleColor);
+
+      // In Dark mode, orange accent is #FF7A1A
+      expect(
+        tester.widget<Text>(find.text('Change')).style?.color,
+        agosAccentOrange,
+      );
+      expect(
+        tester.widget<Text>(find.text('SETTINGS').last).style?.color,
+        agosAccentOrange,
+      );
+
+      // Click Light mode -> switches to light theme and changes all orange accents to #C24D08
+      await tester.ensureVisible(find.text('Light'));
+      await tester.tap(find.text('Light'));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<Text>(find.text('Change')).style?.color,
+        agosAccentOrangeLight,
+      );
+      expect(
+        tester.widget<Text>(find.text('SETTINGS').last).style?.color,
+        agosAccentOrangeLight,
+      );
+
+      // Switch back to Dark mode -> restores #FF7A1A orange accent
+      await tester.tap(find.text('Dark'));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<Text>(find.text('Change')).style?.color,
+        agosAccentOrange,
+      );
 
       // Return to MAP and confirm demo banner is shown
       await tester.tap(find.text('MAP').last);

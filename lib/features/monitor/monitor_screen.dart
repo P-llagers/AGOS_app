@@ -24,6 +24,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final controller = widget.controller;
     final now = controller.now;
     final nodes = [...controller.nodes]
@@ -47,29 +48,29 @@ class _MonitorScreenState extends State<MonitorScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: agosSurface,
+                  color: palette.surface,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: agosBorderBright),
+                  border: Border.all(color: palette.borderBright),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'ON THE WATER. WITHIN REACH.',
                       style: TextStyle(
                         fontFamily: 'Barlow',
-                        color: agosOnlineGreen,
+                        color: palette.online,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.6,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Every signal matters.',
                       style: TextStyle(
                         fontFamily: 'Barlow',
-                        color: agosTextPrimary,
+                        color: palette.textPrimary,
                         fontSize: 26,
                         fontWeight: FontWeight.w700,
                       ),
@@ -77,9 +78,9 @@ class _MonitorScreenState extends State<MonitorScreen> {
                     const SizedBox(height: 8),
                     Text(
                       _feedLabel(controller),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Barlow',
-                        color: agosMutedText,
+                        color: palette.textMuted,
                         height: 1.5,
                       ),
                     ),
@@ -119,14 +120,14 @@ class _MonitorScreenState extends State<MonitorScreen> {
               const SizedBox(height: 24),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Node readings',
                       style: TextStyle(
                         fontFamily: 'Barlow',
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: agosTextPrimary,
+                        color: palette.textPrimary,
                       ),
                     ),
                   ),
@@ -136,10 +137,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
                         : controller.isSavedSnapshot || !controller.isPolling
                         ? 'SAVED / OFFLINE'
                         : 'GATEWAY FEED',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Barlow',
                       fontSize: 10.5,
-                      color: agosOnlineGreen,
+                      color: palette.online,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1,
                     ),
@@ -147,11 +148,11 @@ class _MonitorScreenState extends State<MonitorScreen> {
                 ],
               ),
               const SizedBox(height: 6),
-              const Text(
+              Text(
                 'GPS and link status · Rescue priorities are not yet reported by the nodes.',
                 style: TextStyle(
                   fontFamily: 'Barlow',
-                  color: agosMutedText,
+                  color: palette.textMuted,
                   height: 1.5,
                 ),
               ),
@@ -162,28 +163,28 @@ class _MonitorScreenState extends State<MonitorScreen> {
                     padding: const EdgeInsets.all(28),
                     child: Column(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.sensors_off,
                           size: 40,
-                          color: agosMutedText,
+                          color: palette.textMuted,
                         ),
                         const SizedBox(height: 14),
-                        const Text(
+                        Text(
                           'Waiting for the first signal',
                           style: TextStyle(
                             fontFamily: 'Barlow',
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
-                            color: agosTextPrimary,
+                            color: palette.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
+                        Text(
                           'Connect to your gateway to receive node readings, or explore a simulated example.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Barlow',
-                            color: agosMutedText,
+                            color: palette.textMuted,
                             height: 1.5,
                           ),
                         ),
@@ -208,18 +209,18 @@ class _MonitorScreenState extends State<MonitorScreen> {
                     ),
                   ),
               const SizedBox(height: 14),
-              const Text(
+              Text(
                 'AGOS · Autonomous Geolocation for Open-sea Survival',
                 style: TextStyle(
                   fontFamily: 'Barlow',
                   fontSize: 11,
-                  color: agosLabelMuted,
+                  color: palette.textLabel,
                 ),
               ),
 
               // Tactical NODES directory & filter section added at the bottom
               const SizedBox(height: 24),
-              const Divider(height: 1, color: agosBorder),
+              Divider(height: 1, color: palette.border),
               const SizedBox(height: 22),
               _TacticalNodesSection(
                 allCount: nodes.length,
@@ -298,6 +299,7 @@ class _TacticalNodesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     const titleFontSize = 32.0;
     const updatedFontSize = 13.5;
 
@@ -309,9 +311,9 @@ class _TacticalNodesSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            const Flexible(
+            Flexible(
               child: Padding(
-                padding: EdgeInsets.only(right: 12),
+                padding: const EdgeInsets.only(right: 12),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,
@@ -322,7 +324,7 @@ class _TacticalNodesSection extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       fontSize: titleFontSize,
                       letterSpacing: titleFontSize * 0.02, // 2% tracking
-                      color: Colors.white,
+                      color: palette.headerTitle,
                     ),
                   ),
                 ),
@@ -334,12 +336,14 @@ class _TacticalNodesSection extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: Text(
                   updatedLabel,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Barlow Semi Condensed',
                     fontWeight: FontWeight.w500,
                     fontSize: updatedFontSize,
                     letterSpacing: updatedFontSize * 0.01, // 1% tracking
-                    color: Color(0xFFDCE7F0),
+                    color: palette.isDark
+                        ? const Color(0xFFDCE7F0)
+                        : palette.textMuted,
                   ),
                 ),
               ),
@@ -395,14 +399,15 @@ class _NodesFilterPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     const buttonFontSize = 14.5;
 
     return Material(
-      color: selected ? const Color(0xFF1A344D) : const Color(0xFF102235),
+      color: selected ? palette.pillSelectedBg : palette.pillBg,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
         side: BorderSide(
-          color: selected ? agosAccentOrange : agosBorderBright,
+          color: selected ? palette.accent : palette.borderBright,
           width: selected ? 2 : 1,
         ),
       ),
@@ -413,12 +418,12 @@ class _NodesFilterPill extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow Semi Condensed',
               fontWeight: FontWeight.w500,
               fontSize: buttonFontSize,
               letterSpacing: buttonFontSize * -0.01, // -1% tracking
-              color: agosTextPrimary,
+              color: palette.textPrimary,
             ),
           ),
         ),
@@ -435,6 +440,7 @@ class _TacticalEmptyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final (title, body) = switch (filter) {
       _NodesFilter.all => (
         'No nodes recorded',
@@ -456,31 +462,31 @@ class _TacticalEmptyCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
       decoration: BoxDecoration(
-        color: agosSurface,
+        color: palette.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: agosBorderBright, width: 1),
+        border: Border.all(color: palette.borderBright, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow Condensed',
               fontWeight: FontWeight.w700,
               fontSize: 20,
               letterSpacing: 0.4,
-              color: agosTextPrimary,
+              color: palette.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             body,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow',
               fontSize: 13.5,
               height: 1.45,
-              color: agosMutedText,
+              color: palette.textMuted,
             ),
           ),
         ],
@@ -508,6 +514,7 @@ class _TacticalNodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final current = node.hasCurrentFix(now);
     final age = node.ageAt(now);
     final elapsed = age.inSeconds < 60
@@ -520,9 +527,9 @@ class _TacticalNodeCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF102336),
+        color: palette.surfaceAlt,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: agosBorderBright, width: 1.1),
+        border: Border.all(color: palette.borderBright, width: 1.1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,12 +542,12 @@ class _TacticalNodeCard extends StatelessWidget {
                   isDemo
                       ? 'NODE ${node.packet.nodeId} (DEMO)'
                       : 'NODE ${node.packet.nodeId}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Barlow Condensed',
                     fontWeight: FontWeight.w700,
                     fontSize: 25,
                     letterSpacing: 0.5,
-                    color: Colors.white,
+                    color: palette.headerTitle,
                   ),
                 ),
               ),
@@ -572,13 +579,13 @@ class _TacticalNodeCard extends StatelessWidget {
                     node.packet.longitude != null
                 ? _formatCoord(node.packet.latitude!, node.packet.longitude!)
                 : '${node.fixLabel(now)} · Position unavailable',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Barlow',
               fontWeight: FontWeight.w500,
               fontSize: 13.5,
               letterSpacing: 0.6,
-              color: agosMutedText,
-              fontFeatures: [FontFeature.tabularFigures()],
+              color: palette.textMuted,
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
         ],
@@ -594,9 +601,14 @@ class _TacticalStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = online ? const Color(0xFF0E2F2C) : const Color(0xFF2B2312);
-    final borderColor = online ? agosOnlineGreen : const Color(0xFFC49228);
-    final fgColor = online ? agosOnlineGreen : agosWarningAmber;
+    final palette = AgosPalette.of(context);
+    final bgColor = online
+        ? (palette.isDark ? const Color(0xFF0E2F2C) : const Color(0xFFE6F7F1))
+        : (palette.isDark ? const Color(0xFF2B2312) : const Color(0xFFFFF4DC));
+    final borderColor = online
+        ? palette.online
+        : (palette.isDark ? const Color(0xFFC49228) : palette.warning);
+    final fgColor = online ? palette.online : palette.warning;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
@@ -641,6 +653,7 @@ class _TacticalStatColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: Column(
@@ -651,12 +664,12 @@ class _TacticalStatColumn extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Barlow Semi Condensed',
                 fontWeight: FontWeight.w500,
                 fontSize: 11.5,
                 letterSpacing: 0.6,
-                color: agosLabelMuted,
+                color: palette.textLabel,
               ),
             ),
           ),
@@ -666,12 +679,12 @@ class _TacticalStatColumn extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Barlow',
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
-                color: agosTextPrimary,
-                fontFeatures: [FontFeature.tabularFigures()],
+                color: palette.textPrimary,
+                fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
           ),
@@ -688,35 +701,38 @@ class _Metric extends StatelessWidget {
   final IconData icon;
 
   @override
-  Widget build(BuildContext context) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: agosAccentOrange, size: 22),
-          const SizedBox(height: 10),
-          Text(
-            value,
-            style: const TextStyle(
-              fontFamily: 'Barlow',
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: agosTextPrimary,
+  Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: palette.accent, size: 22),
+            const SizedBox(height: 10),
+            Text(
+              value,
+              style: TextStyle(
+                fontFamily: 'Barlow',
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+                color: palette.textPrimary,
+              ),
             ),
-          ),
-          Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Barlow',
-              fontSize: 12,
-              color: agosMutedText,
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'Barlow',
+                fontSize: 12,
+                color: palette.textMuted,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _NodeCard extends StatelessWidget {
@@ -731,6 +747,7 @@ class _NodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     final current = node.hasCurrentFix(now);
     final age = node.ageAt(now);
     final elapsed = age.inSeconds < 60
@@ -748,9 +765,13 @@ class _NodeCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   backgroundColor: current
-                      ? const Color(0xFF143C38)
-                      : const Color(0xFF2B2518),
-                  foregroundColor: current ? agosOnlineGreen : agosWarningAmber,
+                      ? (palette.isDark
+                            ? const Color(0xFF143C38)
+                            : const Color(0xFFE5F6F0))
+                      : (palette.isDark
+                            ? const Color(0xFF2B2518)
+                            : const Color(0xFFFFF3DC)),
+                  foregroundColor: current ? palette.online : palette.warning,
                   child: Text(
                     node.packet.nodeId,
                     style: const TextStyle(
@@ -766,19 +787,19 @@ class _NodeCard extends StatelessWidget {
                     children: [
                       Text(
                         'Node ${node.packet.nodeId}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Barlow',
                           fontWeight: FontWeight.w700,
                           fontSize: 17,
-                          color: agosTextPrimary,
+                          color: palette.textPrimary,
                         ),
                       ),
                       Text(
                         '${isDemo ? 'Simulated reception' : 'Last received'} $elapsed',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Barlow',
                           fontSize: 12,
-                          color: agosMutedText,
+                          color: palette.textMuted,
                         ),
                       ),
                     ],
@@ -786,17 +807,17 @@ class _NodeCard extends StatelessWidget {
                 ),
                 Icon(
                   current ? Icons.gps_fixed : Icons.gps_not_fixed,
-                  color: current ? agosOnlineGreen : agosWarningAmber,
+                  color: current ? palette.online : palette.warning,
                 ),
               ],
             ),
             const SizedBox(height: 14),
             Text(
               node.fixLabel(now),
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Barlow',
                 fontWeight: FontWeight.w600,
-                color: agosTextPrimary,
+                color: palette.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
@@ -804,10 +825,7 @@ class _NodeCard extends StatelessWidget {
               current
                   ? '${node.packet.latitude!.toStringAsFixed(6)}, ${node.packet.longitude!.toStringAsFixed(6)}'
                   : 'Current position unavailable',
-              style: const TextStyle(
-                fontFamily: 'Barlow',
-                color: agosMutedText,
-              ),
+              style: TextStyle(fontFamily: 'Barlow', color: palette.textMuted),
             ),
             const SizedBox(height: 12),
             Wrap(
@@ -816,26 +834,26 @@ class _NodeCard extends StatelessWidget {
               children: [
                 Text(
                   'RSSI ${node.rssiDbm == null ? '—' : '${node.rssiDbm} dBm'}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Barlow',
                     fontSize: 12,
-                    color: agosMutedText,
+                    color: palette.textMuted,
                   ),
                 ),
                 Text(
                   'SNR ${node.snrDb == null ? '—' : '${node.snrDb!.toStringAsFixed(1)} dB'}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Barlow',
                     fontSize: 12,
-                    color: agosMutedText,
+                    color: palette.textMuted,
                   ),
                 ),
                 Text(
                   'Satellites ${node.packet.satellites ?? '—'}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Barlow',
                     fontSize: 12,
-                    color: agosMutedText,
+                    color: palette.textMuted,
                   ),
                 ),
               ],
@@ -845,18 +863,18 @@ class _NodeCard extends StatelessWidget {
               spacing: 16,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Priority not reported',
                   style: TextStyle(
                     fontFamily: 'Barlow',
                     fontSize: 12,
-                    color: agosLabelMuted,
+                    color: palette.textLabel,
                   ),
                 ),
                 TextButton(
                   onPressed: () => showModalBottomSheet<void>(
                     context: context,
-                    backgroundColor: agosSurface,
+                    backgroundColor: palette.surface,
                     isScrollControlled: true,
                     builder: (context) => SafeArea(
                       child: SingleChildScrollView(
@@ -872,15 +890,15 @@ class _NodeCard extends StatelessWidget {
                             const SizedBox(height: 16),
                             SelectableText(
                               node.packet.raw,
-                              style: const TextStyle(
-                                color: agosOnlineGreen,
+                              style: TextStyle(
+                                color: palette.online,
                                 fontFamily: 'Barlow',
                               ),
                             ),
                             const SizedBox(height: 16),
-                            const Text(
+                            Text(
                               'Coordinates in the packet are the sender’s last report. GPS age and time since reception determine whether they are still current.',
-                              style: TextStyle(color: agosMutedText),
+                              style: TextStyle(color: palette.textMuted),
                             ),
                             const SizedBox(height: 16),
                           ],

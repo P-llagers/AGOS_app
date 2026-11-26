@@ -18,6 +18,7 @@ class AgosApp extends StatefulWidget {
 class _AgosAppState extends State<AgosApp> {
   // Default landing tab after the 1-second splash is MAP (index 0).
   int _page = 0;
+  ThemeMode _themeMode = ThemeMode.dark;
 
   @override
   void dispose() {
@@ -25,63 +26,77 @@ class _AgosAppState extends State<AgosApp> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final baseTheme = ThemeData(
+  ThemeData _buildTheme(AgosPalette palette) {
+    final brightness = palette.isDark ? Brightness.dark : Brightness.light;
+    final colorScheme = palette.isDark
+        ? ColorScheme.dark(
+            primary: palette.accent,
+            onPrimary: Colors.white,
+            secondary: palette.online,
+            onSecondary: agosNavy,
+            surface: palette.surface,
+            onSurface: palette.textPrimary,
+            error: palette.danger,
+            onError: Colors.white,
+            outline: palette.borderBright,
+          )
+        : ColorScheme.light(
+            primary: palette.accent,
+            onPrimary: Colors.white,
+            secondary: palette.online,
+            onSecondary: Colors.white,
+            surface: palette.surface,
+            onSurface: palette.textPrimary,
+            error: palette.danger,
+            onError: Colors.white,
+            outline: palette.borderBright,
+          );
+
+    return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: brightness,
       fontFamily: 'Barlow',
-      colorScheme: const ColorScheme.dark(
-        primary: agosAccentOrange,
-        onPrimary: Colors.white,
-        secondary: agosOnlineGreen,
-        onSecondary: agosNavy,
-        surface: agosSurface,
-        onSurface: agosTextPrimary,
-        error: agosAlertRed,
-        onError: Colors.white,
-        outline: agosBorderBright,
-      ),
-      scaffoldBackgroundColor: agosScaffoldBg,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: agosBarBg,
-        foregroundColor: agosTextPrimary,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: palette.scaffoldBg,
+      appBarTheme: AppBarTheme(
+        backgroundColor: palette.barBg,
+        foregroundColor: palette.textPrimary,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 62,
       ),
       cardTheme: CardThemeData(
-        color: agosSurface,
+        color: palette.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
-          side: const BorderSide(color: agosBorder),
+          side: BorderSide(color: palette.border),
         ),
       ),
-      dividerColor: agosBorder,
+      dividerColor: palette.border,
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: agosBarBg,
-        labelStyle: const TextStyle(color: agosMutedText),
-        hintStyle: const TextStyle(color: agosLabelMuted),
-        prefixIconColor: agosMutedText,
+        fillColor: palette.inputFill,
+        labelStyle: TextStyle(color: palette.textMuted),
+        hintStyle: TextStyle(color: palette.textLabel),
+        prefixIconColor: palette.textMuted,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: agosBorderBright),
+          borderSide: BorderSide(color: palette.borderBright),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: agosBorderBright),
+          borderSide: BorderSide(color: palette.borderBright),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: agosAccentOrange, width: 1.5),
+          borderSide: BorderSide(color: palette.accent, width: 1.5),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: agosAccentOrange,
+          backgroundColor: palette.accent,
           foregroundColor: Colors.white,
           textStyle: const TextStyle(
             fontFamily: 'Barlow',
@@ -95,8 +110,8 @@ class _AgosAppState extends State<AgosApp> {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: agosTextPrimary,
-          side: const BorderSide(color: agosBorderBright),
+          foregroundColor: palette.textPrimary,
+          side: BorderSide(color: palette.borderBright),
           textStyle: const TextStyle(
             fontFamily: 'Barlow',
             fontWeight: FontWeight.w600,
@@ -107,19 +122,28 @@ class _AgosAppState extends State<AgosApp> {
           ),
         ),
       ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: palette.accent),
+      ),
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AGOS · Rescue monitor',
       debugShowCheckedModeBanner: false,
-      theme: baseTheme,
+      theme: _buildTheme(AgosPalette.light),
+      darkTheme: _buildTheme(AgosPalette.dark),
+      themeMode: _themeMode,
       home: ListenableBuilder(
         listenable: widget.controller,
         builder: (context, _) {
+          final palette = AgosPalette.of(context);
           final controller = widget.controller;
           final showHeaderNotices = _page != 0;
           return Scaffold(
-            backgroundColor: agosScaffoldBg,
+            backgroundColor: palette.scaffoldBg,
             appBar: _AgosTopBar(
               controller: controller,
               onGatewayTap: () => setState(() => _page = 3),
@@ -129,32 +153,47 @@ class _AgosAppState extends State<AgosApp> {
                 if (showHeaderNotices && controller.isDemo)
                   _Notice(
                     text: 'DEMO · Simulated readings. No real survivors are shown.',
-                    color: const Color(0xFF2E2412),
-                    borderColor: const Color(0xFF8C6924),
-                    iconColor: agosWarningAmber,
+                    color: palette.isDark
+                        ? const Color(0xFF2E2412)
+                        : const Color(0xFFFFF4DC),
+                    borderColor: palette.isDark
+                        ? const Color(0xFF8C6924)
+                        : const Color(0xFFE0B45A),
+                    iconColor: palette.warning,
+                    textColor: palette.textPrimary,
                     icon: Icons.science_outlined,
                     action: TextButton(
                       onPressed: () => _restoreSaved(context),
-                      child: const Text(
+                      child: Text(
                         'Exit demo',
-                        style: TextStyle(color: agosWarningAmber),
+                        style: TextStyle(color: palette.warning),
                       ),
                     ),
                   ),
                 if (showHeaderNotices && controller.error != null)
                   _Notice(
                     text: controller.error!,
-                    color: agosAlertBg,
-                    borderColor: agosAlertBorder,
-                    iconColor: agosAlertRed,
+                    color: palette.isDark
+                        ? agosAlertBg
+                        : const Color(0xFFFFECEE),
+                    borderColor: palette.isDark
+                        ? agosAlertBorder
+                        : const Color(0xFFE48C92),
+                    iconColor: palette.danger,
+                    textColor: palette.textPrimary,
                     icon: Icons.wifi_off,
                   ),
                 if (showHeaderNotices && controller.storageError != null)
                   _Notice(
                     text: controller.storageError!,
-                    color: const Color(0xFF2E2412),
-                    borderColor: const Color(0xFF8C6924),
-                    iconColor: agosWarningAmber,
+                    color: palette.isDark
+                        ? const Color(0xFF2E2412)
+                        : const Color(0xFFFFF4DC),
+                    borderColor: palette.isDark
+                        ? const Color(0xFF8C6924)
+                        : const Color(0xFFE0B45A),
+                    iconColor: palette.warning,
+                    textColor: palette.textPrimary,
                     icon: Icons.save_outlined,
                   ),
                 Expanded(
@@ -175,7 +214,15 @@ class _AgosAppState extends State<AgosApp> {
                         onOpenSettings: () => setState(() => _page = 3),
                         onOpenNodes: () => setState(() => _page = 1),
                       ),
-                      GatewayScreen(controller: controller),
+                      GatewayScreen(
+                        controller: controller,
+                        isDarkMode: _themeMode == ThemeMode.dark,
+                        onThemeChanged: (dark) => setState(
+                          () => _themeMode = dark
+                              ? ThemeMode.dark
+                              : ThemeMode.light,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -213,25 +260,26 @@ class _AgosTopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(62);
 
-  Color _dotColor() {
-    if (controller.isDemo) return agosWarningAmber;
+  Color _dotColor(AgosPalette palette) {
+    if (controller.isDemo) return palette.warning;
     return switch (controller.status) {
-      GatewayStatus.connected => agosOnlineGreen,
-      GatewayStatus.connecting => agosWarningAmber,
-      GatewayStatus.error => agosAlertRed,
-      GatewayStatus.disconnected => agosLabelMuted,
+      GatewayStatus.connected => palette.online,
+      GatewayStatus.connecting => palette.warning,
+      GatewayStatus.error => palette.danger,
+      GatewayStatus.disconnected => palette.textLabel,
     };
   }
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     const agosFontSize = 28.0;
     const gatewayFontSize = 12.5;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: agosBarBg,
-        border: Border(bottom: BorderSide(color: agosBorder, width: 1)),
+      decoration: BoxDecoration(
+        color: palette.barBg,
+        border: Border(bottom: BorderSide(color: palette.border, width: 1)),
       ),
       child: SafeArea(
         bottom: false,
@@ -242,9 +290,9 @@ class _AgosTopBar extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Flexible(
+                Flexible(
                   child: Padding(
-                    padding: EdgeInsets.only(right: 12),
+                    padding: const EdgeInsets.only(right: 12),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
@@ -255,7 +303,7 @@ class _AgosTopBar extends StatelessWidget implements PreferredSizeWidget {
                           fontWeight: FontWeight.w900,
                           fontSize: agosFontSize,
                           letterSpacing: agosFontSize * 0.08, // 8% tracking
-                          color: Colors.white,
+                          color: palette.headerTitle,
                         ),
                       ),
                     ),
@@ -266,13 +314,10 @@ class _AgosTopBar extends StatelessWidget implements PreferredSizeWidget {
                     fit: BoxFit.scaleDown,
                     alignment: Alignment.centerRight,
                     child: Material(
-                      color: const Color(0xFF102234),
+                      color: palette.pillBg,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
-                        side: const BorderSide(
-                          color: agosBorderBright,
-                          width: 1,
-                        ),
+                        side: BorderSide(color: palette.borderBright, width: 1),
                       ),
                       child: InkWell(
                         onTap: onGatewayTap,
@@ -289,12 +334,12 @@ class _AgosTopBar extends StatelessWidget implements PreferredSizeWidget {
                                 width: 8.5,
                                 height: 8.5,
                                 decoration: BoxDecoration(
-                                  color: _dotColor(),
+                                  color: _dotColor(palette),
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              Text(
                                 'GATEWAY',
                                 style: TextStyle(
                                   fontFamily: 'Barlow Semi Condensed',
@@ -302,7 +347,7 @@ class _AgosTopBar extends StatelessWidget implements PreferredSizeWidget {
                                   fontSize: gatewayFontSize,
                                   letterSpacing:
                                       gatewayFontSize * 0.03, // 3% tracking
-                                  color: agosTextPrimary,
+                                  color: palette.textPrimary,
                                 ),
                               ),
                             ],
@@ -367,13 +412,14 @@ class _AgosBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AgosPalette.of(context);
     const labelFontSize = 9.5;
     const labelLetterSpacing = labelFontSize * 0.08; // Exact 8% letter spacing
 
     return Container(
-      decoration: const BoxDecoration(
-        color: agosBarBg,
-        border: Border(top: BorderSide(color: agosBorder, width: 1)),
+      decoration: BoxDecoration(
+        color: palette.barBg,
+        border: Border(top: BorderSide(color: palette.border, width: 1)),
       ),
       child: SafeArea(
         top: false,
@@ -416,10 +462,11 @@ class _AgosNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = selected ? agosAccentOrange : agosMutedText;
+    final palette = AgosPalette.of(context);
+    final textColor = selected ? palette.accent : palette.navUnselected;
     return InkWell(
       onTap: onTap,
-      splashColor: const Color(0x1FFF7A1A),
+      splashColor: palette.accent.withAlpha(32),
       highlightColor: Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
@@ -432,6 +479,11 @@ class _AgosNavButton extends StatelessWidget {
               width: 18,
               height: 18,
               fit: BoxFit.contain,
+              // Tint selected icon to #C24D08 in light mode; preserve #FF7A1A PNG in dark mode.
+              color: palette.isDark
+                  ? null
+                  : (selected ? palette.accent : palette.navUnselected),
+              colorBlendMode: palette.isDark ? null : BlendMode.srcIn,
             ),
             const SizedBox(height: 5),
             Flexible(
@@ -463,6 +515,7 @@ class _Notice extends StatelessWidget {
     required this.color,
     required this.borderColor,
     required this.iconColor,
+    required this.textColor,
     required this.icon,
     this.action,
   });
@@ -471,6 +524,7 @@ class _Notice extends StatelessWidget {
   final Color color;
   final Color borderColor;
   final Color iconColor;
+  final Color textColor;
   final IconData icon;
   final Widget? action;
 
@@ -492,10 +546,10 @@ class _Notice extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Barlow',
                   fontSize: 13,
-                  color: agosTextPrimary,
+                  color: textColor,
                 ),
               ),
             ),
