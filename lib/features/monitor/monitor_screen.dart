@@ -240,7 +240,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
   }
 
   String _updatedTimestampLabel(MonitorController controller) {
-    final stamp = controller.lastSync ??
+    final stamp =
+        controller.lastSync ??
         (controller.isDemo ? controller.now : null) ??
         (controller.nodes.isNotEmpty
             ? controller.nodes
@@ -266,10 +267,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
             : 'Gateway connected. Readings are available for this session.',
       GatewayStatus.connecting =>
         'Contacting the gateway. Waiting for a valid response.',
-      GatewayStatus.error =>
-        'Gateway feed interrupted. Previously received readings remain visible.',
-      GatewayStatus.disconnected =>
-        'An offline view of your rescue network. Connect a gateway to start receiving readings.',
+      GatewayStatus.error => 'Gateway feed interrupted. Previously received readings remain visible.',
+      GatewayStatus.disconnected => 'An offline view of your rescue network. Connect a gateway to start receiving readings.',
     };
   }
 }
@@ -553,10 +552,7 @@ class _TacticalNodeCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _TacticalStatColumn(
-                  label: 'LAST HOP',
-                  value: elapsed,
-                ),
+                child: _TacticalStatColumn(label: 'LAST HOP', value: elapsed),
               ),
               Expanded(
                 child: _TacticalStatColumn(
@@ -565,10 +561,7 @@ class _TacticalNodeCard extends StatelessWidget {
                 ),
               ),
               const Expanded(
-                child: _TacticalStatColumn(
-                  label: 'BATTERY',
-                  value: 'N/A',
-                ),
+                child: _TacticalStatColumn(label: 'BATTERY', value: 'N/A'),
               ),
             ],
           ),
@@ -619,10 +612,7 @@ class _TacticalStatusBadge extends StatelessWidget {
             Container(
               width: 8,
               height: 8,
-              decoration: BoxDecoration(
-                color: fgColor,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: fgColor, shape: BoxShape.circle),
             )
           else
             Icon(Icons.access_time_rounded, size: 13, color: fgColor),

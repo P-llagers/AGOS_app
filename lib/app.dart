@@ -173,6 +173,7 @@ class _AgosAppState extends State<AgosApp> {
                       AlertsScreen(
                         controller: controller,
                         onOpenSettings: () => setState(() => _page = 3),
+                        onOpenNodes: () => setState(() => _page = 1),
                       ),
                       GatewayScreen(controller: controller),
                     ],

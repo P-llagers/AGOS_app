@@ -156,10 +156,47 @@ void main() {
       expect(find.text('All 3'), findsOneWidget);
       expect(find.text('Delayed 2'), findsOneWidget);
 
-      // Switch to ALERTS tab
+      // Switch to ALERTS tab and verify styled header, filters, and warning cards
       await tester.tap(find.text('ALERTS').last);
       await tester.pumpAndSettle();
-      expect(find.textContaining('NODE B'), findsOneWidget);
+      expect(find.text('2 need attention'), findsOneWidget);
+      expect(find.text('All'), findsOneWidget);
+      expect(find.text('Critical'), findsOneWidget);
+      expect(find.text('Warnings'), findsOneWidget);
+      expect(find.text('Info'), findsOneWidget);
+      expect(find.text('WARNING · NODE B'), findsOneWidget);
+      expect(find.text('View node B'), findsOneWidget);
+
+      final alertsHeading = tester.widget<Text>(
+        find
+            .descendant(
+              of: find.byType(SingleChildScrollView),
+              matching: find.text('ALERTS'),
+            )
+            .first,
+      );
+      expect(alertsHeading.style?.fontFamily, 'Barlow Condensed');
+      expect(alertsHeading.style?.fontWeight, FontWeight.w700);
+      expect(
+        alertsHeading.style?.letterSpacing,
+        closeTo((alertsHeading.style?.fontSize ?? 32) * 0.02, 0.001),
+      );
+
+      final attentionLabel = tester.widget<Text>(find.text('2 need attention'));
+      expect(attentionLabel.style?.fontFamily, 'Barlow Semi Condensed');
+      expect(attentionLabel.style?.fontWeight, FontWeight.w500);
+      expect(
+        attentionLabel.style?.letterSpacing,
+        closeTo((attentionLabel.style?.fontSize ?? 13.5) * 0.01, 0.001),
+      );
+
+      final criticalPill = tester.widget<Text>(find.text('Critical'));
+      expect(criticalPill.style?.fontFamily, 'Barlow Semi Condensed');
+      expect(criticalPill.style?.fontWeight, FontWeight.w500);
+      expect(
+        criticalPill.style?.letterSpacing,
+        closeTo((criticalPill.style?.fontSize ?? 14.5) * -0.01, 0.001),
+      );
 
       // Switch to SETTINGS tab
       await tester.tap(find.text('SETTINGS').last);
