@@ -12,10 +12,7 @@ class SplashScreen extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF235C96),
-            Color(0xFF071523),
-          ],
+          colors: [Color(0xFF235C96), Color(0xFF071523)],
         ),
       ),
       child: const SafeArea(

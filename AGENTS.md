@@ -22,10 +22,14 @@ measurements distinct.
 
 On 2026-11-14 a Flutter skeleton was added at this folder's root, targeting
 Android/iOS with a web development preview. Read `README.md` for run commands and
-`docs/gateway_protocol.md` for the new app-side HTTP contract. It includes a node
-dashboard, packet validation, connection settings, local snapshot caching, isolated
-demo mode, and tests. The ESP32 gateway firmware and offline map renderer/tiles
-remain unimplemented. Inspect actual files and update this baseline as work changes.
+`docs/gateway_protocol.md` for the new app-side HTTP contract. It includes a
+1-second splash screen, dark tactical maritime UI opening to a zoomable bundled
+offline map of Cebu, Philippines (`assets/map_tiles/`), four-tab navigation
+(`MAP`, `NODES`, `ALERTS`, `SETTINGS`) using bundled Barlow fonts and custom
+icon assets (`lib/assets/`), packet validation, connection settings, local
+snapshot caching, isolated demo mode, and tests. The ESP32 gateway firmware,
+distance/bearing calculations, and wearer priority/battery telemetry remain
+unimplemented. Inspect actual files and update this baseline as work changes.
 
 ## Intended architecture
 
@@ -43,8 +47,9 @@ gateway-hosted local Wi-Fi -> Flutter app on the responder's phone.
   Cloud accounts, internet-hosted map tiles, and remote services must not become
   requirements of the core rescue flow.
 - Mesh, acknowledgements, priority sensing, microSD logging, and the real ESP32
-  Wi-Fi API remain planned. The Flutter HTTP client and Python mock are implemented;
-  neither proves hardware integration. The Map tab is an explicit placeholder.
+  Wi-Fi API remain planned. The Flutter HTTP client, Python mock, and bundled
+  offline Cebu map (`assets/map_tiles/`) are implemented; neither proves hardware
+  integration. Distance/bearing and responder GPS location remain unimplemented.
 
 ## Integrating with the current nodes
 

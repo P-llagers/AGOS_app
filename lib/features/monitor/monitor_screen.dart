@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../../ui/agos_colors.dart';
 import '../../models/node_observation.dart';
+import '../../ui/agos_colors.dart';
 import 'monitor_controller.dart';
 
 class MonitorScreen extends StatelessWidget {
@@ -27,10 +27,11 @@ class MonitorScreen extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: agosNavy,
-                  borderRadius: BorderRadius.circular(24),
+                  color: agosSurface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: agosBorderBright),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,29 +39,33 @@ class MonitorScreen extends StatelessWidget {
                     const Text(
                       'ON THE WATER. WITHIN REACH.',
                       style: TextStyle(
-                        color: Color(0xFF8ED5D1),
-                        fontSize: 10,
-                        letterSpacing: 1.8,
+                        fontFamily: 'Barlow',
+                        color: agosOnlineGreen,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.6,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     const Text(
                       'Every signal matters.',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
+                        fontFamily: 'Barlow',
+                        color: agosTextPrimary,
+                        fontSize: 26,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Text(
                       _feedLabel,
                       style: const TextStyle(
-                        color: Color(0xFFCDDFE8),
+                        fontFamily: 'Barlow',
+                        color: agosMutedText,
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
                     FilledButton.icon(
                       onPressed: onGateway,
                       icon: const Icon(Icons.router_outlined, size: 18),
@@ -73,7 +78,7 @@ class MonitorScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
               Row(
                 children: [
                   Expanded(
@@ -93,16 +98,17 @@ class MonitorScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
               Row(
                 children: [
                   const Expanded(
                     child: Text(
                       'Node readings',
                       style: TextStyle(
-                        fontSize: 21,
+                        fontFamily: 'Barlow',
+                        fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: agosNavy,
+                        color: agosTextPrimary,
                       ),
                     ),
                   ),
@@ -113,8 +119,9 @@ class MonitorScreen extends StatelessWidget {
                         ? 'SAVED / OFFLINE'
                         : 'GATEWAY FEED',
                     style: const TextStyle(
-                      fontSize: 10,
-                      color: agosTeal,
+                      fontFamily: 'Barlow',
+                      fontSize: 10.5,
+                      color: agosOnlineGreen,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1,
                     ),
@@ -124,7 +131,11 @@ class MonitorScreen extends StatelessWidget {
               const SizedBox(height: 6),
               const Text(
                 'GPS and link status · Rescue priorities are not yet reported by the nodes.',
-                style: TextStyle(color: Color(0xFF5B707C), height: 1.5),
+                style: TextStyle(
+                  fontFamily: 'Barlow',
+                  color: agosMutedText,
+                  height: 1.5,
+                ),
               ),
               const SizedBox(height: 16),
               if (nodes.isEmpty)
@@ -135,22 +146,28 @@ class MonitorScreen extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.sensors_off,
-                          size: 42,
-                          color: agosTeal,
+                          size: 40,
+                          color: agosMutedText,
                         ),
                         const SizedBox(height: 14),
                         const Text(
                           'Waiting for the first signal',
                           style: TextStyle(
+                            fontFamily: 'Barlow',
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
+                            color: agosTextPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           'Connect to your gateway to receive node readings, or explore a simulated example.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(height: 1.5),
+                          style: TextStyle(
+                            fontFamily: 'Barlow',
+                            color: agosMutedText,
+                            height: 1.5,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         OutlinedButton.icon(
@@ -172,10 +189,14 @@ class MonitorScreen extends StatelessWidget {
                       isDemo: controller.isDemo,
                     ),
                   ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
               const Text(
                 'AGOS · Autonomous Geolocation for Open-sea Survival',
-                style: TextStyle(fontSize: 11, color: Color(0xFF6B7E87)),
+                style: TextStyle(
+                  fontFamily: 'Barlow',
+                  fontSize: 11,
+                  color: agosLabelMuted,
+                ),
               ),
             ],
           ),
@@ -210,23 +231,28 @@ class _Metric extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
     child: Padding(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: agosTeal, size: 22),
+          Icon(icon, color: agosAccentOrange, size: 22),
           const SizedBox(height: 10),
           Text(
             value,
             style: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-              color: agosNavy,
+              fontFamily: 'Barlow',
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              color: agosTextPrimary,
             ),
           ),
           Text(
             label,
-            style: const TextStyle(fontSize: 12, color: Color(0xFF5B707C)),
+            style: const TextStyle(
+              fontFamily: 'Barlow',
+              fontSize: 12,
+              color: agosMutedText,
+            ),
           ),
         ],
       ),
@@ -262,11 +288,16 @@ class _NodeCard extends StatelessWidget {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: const Color(0xFFE6F2F1),
-                  foregroundColor: agosTeal,
+                  backgroundColor: current
+                      ? const Color(0xFF143C38)
+                      : const Color(0xFF2B2518),
+                  foregroundColor: current ? agosOnlineGreen : agosWarningAmber,
                   child: Text(
                     node.packet.nodeId,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                      fontFamily: 'Barlow',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -277,15 +308,18 @@ class _NodeCard extends StatelessWidget {
                       Text(
                         'Node ${node.packet.nodeId}',
                         style: const TextStyle(
+                          fontFamily: 'Barlow',
                           fontWeight: FontWeight.w700,
                           fontSize: 17,
+                          color: agosTextPrimary,
                         ),
                       ),
                       Text(
                         '${isDemo ? 'Simulated reception' : 'Last received'} $elapsed',
                         style: const TextStyle(
+                          fontFamily: 'Barlow',
                           fontSize: 12,
-                          color: Color(0xFF5B707C),
+                          color: agosMutedText,
                         ),
                       ),
                     ],
@@ -293,21 +327,28 @@ class _NodeCard extends StatelessWidget {
                 ),
                 Icon(
                   current ? Icons.gps_fixed : Icons.gps_not_fixed,
-                  color: current ? agosTeal : const Color(0xFF93702C),
+                  color: current ? agosOnlineGreen : agosWarningAmber,
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             Text(
               node.fixLabel(now),
-              style: const TextStyle(fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontFamily: 'Barlow',
+                fontWeight: FontWeight.w600,
+                color: agosTextPrimary,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               current
                   ? '${node.packet.latitude!.toStringAsFixed(6)}, ${node.packet.longitude!.toStringAsFixed(6)}'
                   : 'Current position unavailable',
-              style: const TextStyle(color: Color(0xFF5B707C)),
+              style: const TextStyle(
+                fontFamily: 'Barlow',
+                color: agosMutedText,
+              ),
             ),
             const SizedBox(height: 12),
             Wrap(
@@ -316,15 +357,27 @@ class _NodeCard extends StatelessWidget {
               children: [
                 Text(
                   'RSSI ${node.rssiDbm == null ? '—' : '${node.rssiDbm} dBm'}',
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(
+                    fontFamily: 'Barlow',
+                    fontSize: 12,
+                    color: agosMutedText,
+                  ),
                 ),
                 Text(
                   'SNR ${node.snrDb == null ? '—' : '${node.snrDb!.toStringAsFixed(1)} dB'}',
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(
+                    fontFamily: 'Barlow',
+                    fontSize: 12,
+                    color: agosMutedText,
+                  ),
                 ),
                 Text(
                   'Satellites ${node.packet.satellites ?? '—'}',
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(
+                    fontFamily: 'Barlow',
+                    fontSize: 12,
+                    color: agosMutedText,
+                  ),
                 ),
               ],
             ),
@@ -335,11 +388,16 @@ class _NodeCard extends StatelessWidget {
               children: [
                 const Text(
                   'Priority not reported',
-                  style: TextStyle(fontSize: 12, color: Color(0xFF5B707C)),
+                  style: TextStyle(
+                    fontFamily: 'Barlow',
+                    fontSize: 12,
+                    color: agosLabelMuted,
+                  ),
                 ),
                 TextButton(
                   onPressed: () => showModalBottomSheet<void>(
                     context: context,
+                    backgroundColor: agosSurface,
                     isScrollControlled: true,
                     builder: (context) => SafeArea(
                       child: SingleChildScrollView(
@@ -353,10 +411,17 @@ class _NodeCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 16),
-                            SelectableText(node.packet.raw),
+                            SelectableText(
+                              node.packet.raw,
+                              style: const TextStyle(
+                                color: agosOnlineGreen,
+                                fontFamily: 'Barlow',
+                              ),
+                            ),
                             const SizedBox(height: 16),
                             const Text(
                               'Coordinates in the packet are the sender’s last report. GPS age and time since reception determine whether they are still current.',
+                              style: TextStyle(color: agosMutedText),
                             ),
                             const SizedBox(height: 16),
                           ],

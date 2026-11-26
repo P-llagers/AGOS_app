@@ -27,10 +27,7 @@ class _BootstrapState extends State<_Bootstrap> {
 
     try {
       final store = await LocalStore.open();
-      controller = MonitorController(
-        client: HttpGatewayClient(),
-        store: store,
-      );
+      controller = MonitorController(client: HttpGatewayClient(), store: store);
       await controller.initialize();
       await _waitForMinimumSplash(stopwatch);
       return controller;

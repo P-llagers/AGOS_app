@@ -5,7 +5,7 @@ import '../models/position_packet.dart';
 List<NodeObservation> demoNodes(DateTime now) => [
   NodeObservation(
     packet: PositionPacket.parse(
-      'AGOS,POS,v=1,node=A,seq=1,fix=VALID,age_ms=200,lat=14.599500,lon=120.984200,sat=8',
+      'AGOS,POS,v=1,node=A,seq=1,fix=VALID,age_ms=200,lat=10.268500,lon=123.972400,sat=8',
     ),
     receivedAt: now,
     rssiDbm: -72,

@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../../ui/agos_colors.dart';
 import '../../data/gateway_client.dart';
+import '../../ui/agos_colors.dart';
 import '../monitor/monitor_controller.dart';
 
 class GatewayScreen extends StatefulWidget {
@@ -54,8 +54,17 @@ class _GatewayScreenState extends State<GatewayScreen> {
             GatewayStatus.connected => 'Gateway connected',
             GatewayStatus.error => 'Connection interrupted',
           };
+    final statusColor = controller.isDemo
+        ? agosWarningAmber
+        : switch (controller.status) {
+            GatewayStatus.disconnected => agosLabelMuted,
+            GatewayStatus.connecting => agosWarningAmber,
+            GatewayStatus.connected => agosOnlineGreen,
+            GatewayStatus.error => agosAlertRed,
+          };
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 680),
@@ -63,46 +72,54 @@ class _GatewayScreenState extends State<GatewayScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Gateway',
+                'SETTINGS',
                 style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  color: agosNavy,
+                  fontFamily: 'Barlow',
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.4,
+                  color: agosTextPrimary,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               const Text(
-                'Your local link to the rescue network.',
-                style: TextStyle(color: Color(0xFF5B707C)),
+                'Local gateway connection and offline Cebu map configuration.',
+                style: TextStyle(fontFamily: 'Barlow', color: agosMutedText),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(22),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.router_outlined, color: agosTeal),
+                          Icon(Icons.router_outlined, color: statusColor),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               label,
                               style: const TextStyle(
+                                fontFamily: 'Barlow',
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
+                                color: agosTextPrimary,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 20),
                       const Text(
                         '1. Join the gateway’s Wi-Fi in your phone settings.\n2. Enter its address below and connect.',
-                        style: TextStyle(height: 1.7),
+                        style: TextStyle(
+                          fontFamily: 'Barlow',
+                          height: 1.7,
+                          color: agosMutedText,
+                        ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 18),
                       Form(
                         key: _form,
                         child: TextFormField(
@@ -110,6 +127,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
                           enabled: !_working,
                           keyboardType: TextInputType.url,
                           autocorrect: false,
+                          style: const TextStyle(color: agosTextPrimary),
                           decoration: const InputDecoration(
                             labelText: 'Gateway address',
                             hintText: 'http://192.168.4.1',
@@ -138,6 +156,7 @@ class _GatewayScreenState extends State<GatewayScreen> {
                                     height: 16,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
+                                      color: Colors.white,
                                     ),
                                   )
                                 : const Icon(Icons.wifi),
@@ -156,8 +175,9 @@ class _GatewayScreenState extends State<GatewayScreen> {
                       const Text(
                         'No internet connection is needed. The app does not change your phone’s Wi-Fi automatically.',
                         style: TextStyle(
+                          fontFamily: 'Barlow',
                           fontSize: 12,
-                          color: Color(0xFF5B707C),
+                          color: agosLabelMuted,
                           height: 1.5,
                         ),
                       ),
@@ -168,21 +188,27 @@ class _GatewayScreenState extends State<GatewayScreen> {
               const SizedBox(height: 16),
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(22),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Explore before connecting',
                         style: TextStyle(
+                          fontFamily: 'Barlow',
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
+                          color: agosTextPrimary,
                         ),
                       ),
                       const SizedBox(height: 8),
                       const Text(
                         'Demo mode uses simulated readings and keeps them separate from saved gateway data.',
-                        style: TextStyle(height: 1.5),
+                        style: TextStyle(
+                          fontFamily: 'Barlow',
+                          height: 1.5,
+                          color: agosMutedText,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       OutlinedButton.icon(
@@ -194,13 +220,53 @@ class _GatewayScreenState extends State<GatewayScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Offline map pack',
+                        style: TextStyle(
+                          fontFamily: 'Barlow',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: agosTextPrimary,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        'Cebu, Philippines & surrounding straits (bundled locally for offline use, zooms 7–13 with overzoom to 15.5).',
+                        style: TextStyle(
+                          fontFamily: 'Barlow',
+                          fontSize: 13,
+                          height: 1.5,
+                          color: agosMutedText,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        'Map data attribution: Esri, HERE, Garmin, OpenStreetMap contributors, GIS User Community.',
+                        style: TextStyle(
+                          fontFamily: 'Barlow',
+                          fontSize: 11.5,
+                          color: agosLabelMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
               const Text(
                 'AGOS research prototype · Gateway firmware integration is still in development.',
                 style: TextStyle(
+                  fontFamily: 'Barlow',
                   fontSize: 12,
                   height: 1.5,
-                  color: Color(0xFF5B707C),
+                  color: agosLabelMuted,
                 ),
               ),
             ],

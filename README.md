@@ -7,7 +7,11 @@ to the separate `thesis1` project; it is optional for running this app or its de
 
 ## What works
 
-- Responsive Monitor, Map, and Gateway navigation; no account or cloud service.
+- 1-second splash screen followed by the dark maritime `MAP` landing screen with
+  `MAP`, `NODES`, `ALERTS`, and `SETTINGS` navigation; no account or cloud service.
+- Bundled offline zoomable map of Cebu, Philippines (`assets/map_tiles/`, zooms
+  7–13 with seamless overzoom to 15.5, coordinate graticule, and live node markers
+  for current GPS fixes) and bundled offline Barlow typography (`assets/fonts/`).
 - Parsing of existing `AGOS,POS,v=1,...` sensor packets, GPS freshness, reception
   age, RSSI/SNR, and raw packet inspection.
 - Opt-in demo mode; simulated readings never enter the live cache.
@@ -19,9 +23,9 @@ to the separate `thesis1` project; it is optional for running this app or its de
 **Integration boundary:** The HTTP API is a new app-side contract documented in
 [docs/gateway_protocol.md](docs/gateway_protocol.md). The ESP32 gateway does not
 implement it yet. The app does not receive LoRa directly or join Wi-Fi automatically.
-The Map tab is a placeholder: no map tiles, renderer, distance, or bearing are
-implemented. Priority and battery values are unavailable in current packets.
-Mesh, ACKs, microSD logging, and wearer sensing remain firmware work.
+Distance, bearing, and responder phone GPS are not implemented yet. Priority and
+battery values are unavailable in current packets. Mesh, ACKs, microSD logging,
+and wearer sensing remain firmware work.
 
 ## First run
 

@@ -21,15 +21,18 @@ priority-ranked list, and packaged offline map tiles with distance/bearing.
 ## Current implementation boundary
 
 This repo includes the Flutter Android/iOS scaffold, a web development preview,
-node readings, current ASCII packet parsing, GPS freshness handling, configurable
+a 1-second splash screen, the dark maritime UI (`MAP`, `NODES`, `ALERTS`,
+`SETTINGS`) opening to a bundled offline zoomable map of Cebu, Philippines
+(`assets/map_tiles/`), bundled Barlow typography (`assets/fonts/`), node
+readings, current ASCII packet parsing, GPS freshness handling, configurable
 HTTP polling, latest-snapshot storage by gateway address, isolated demo mode, a
 Python mock, and tests. See [the README](../README.md) and the
 [app-side gateway contract](gateway_protocol.md).
 
 Actual ESP32 gateway firmware, mesh/ACKs, microSD logs, wearer-status sensing,
-priority/battery telemetry, full incident history, and offline map rendering/data
-remain integration work. The HTTP snapshot endpoint is an app-side design choice;
-it is not already implemented in the sensor firmware.
+priority/battery telemetry, distance/bearing calculation, and full incident
+history remain integration work. The HTTP snapshot endpoint is an app-side
+design choice; it is not already implemented in the sensor firmware.
 
 The separate sensor workspace is named `thesis1`. At the reviewed baseline it
 contained PlatformIO/Arduino ESP32 GPS/LoRa peers A and B: manual `t` transmission,
