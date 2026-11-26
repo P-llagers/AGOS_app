@@ -104,10 +104,47 @@ void main() {
       await tester.pump();
       expect(mapWidget.controller.zoom, cebuDefaultZoom);
 
-      // Switch to NODES tab and trigger explicit demo
+      // Switch to NODES tab and verify existing content + new bottom NODES section
       await tester.tap(find.text('NODES').last);
       await tester.pumpAndSettle();
       expect(find.text('Waiting for the first signal'), findsOneWidget);
+      expect(find.text('All 0'), findsOneWidget);
+      expect(find.text('SOS 0'), findsOneWidget);
+      expect(find.text('Delayed 0'), findsOneWidget);
+      expect(find.text('Updated --:--'), findsOneWidget);
+
+      final nodesSectionTitle = tester.widget<Text>(
+        find
+            .descendant(
+              of: find.byType(SingleChildScrollView),
+              matching: find.text('NODES'),
+            )
+            .first,
+      );
+      expect(nodesSectionTitle.style?.fontFamily, 'Barlow Condensed');
+      expect(nodesSectionTitle.style?.fontWeight, FontWeight.w700);
+      expect(
+        nodesSectionTitle.style?.letterSpacing,
+        closeTo((nodesSectionTitle.style?.fontSize ?? 32) * 0.02, 0.001),
+      );
+
+      final updatedText = tester.widget<Text>(find.text('Updated --:--'));
+      expect(updatedText.style?.fontFamily, 'Barlow Semi Condensed');
+      expect(updatedText.style?.fontWeight, FontWeight.w500);
+      expect(
+        updatedText.style?.letterSpacing,
+        closeTo((updatedText.style?.fontSize ?? 13.5) * 0.01, 0.001),
+      );
+
+      final allFilterText = tester.widget<Text>(find.text('All 0'));
+      expect(allFilterText.style?.fontFamily, 'Barlow Semi Condensed');
+      expect(allFilterText.style?.fontWeight, FontWeight.w500);
+      expect(
+        allFilterText.style?.letterSpacing,
+        closeTo((allFilterText.style?.fontSize ?? 14.5) * -0.01, 0.001),
+      );
+
+      // Trigger explicit demo and check filter pills update
       await tester.ensureVisible(find.text('Explore demo'));
       await tester.tap(find.text('Explore demo'));
       await tester.pumpAndSettle();
@@ -116,6 +153,8 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Node A'), findsOneWidget);
+      expect(find.text('All 3'), findsOneWidget);
+      expect(find.text('Delayed 2'), findsOneWidget);
 
       // Switch to ALERTS tab
       await tester.tap(find.text('ALERTS').last);
